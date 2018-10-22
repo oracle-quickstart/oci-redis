@@ -1,3 +1,5 @@
+# This repo is work in progress.  Not ready yet, check again in few days.
+
 # oci-redis
 Terraform module to deploy Redis on Oracle Cloud Infrastructure (OCI)
 
