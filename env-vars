@@ -1,0 +1,35 @@
+### Authentication details
+#export TF_VAR_tenancy_ocid=""
+#export TF_VAR_user_ocid=""
+#export TF_VAR_fingerprint=""
+#export TF_VAR_private_key_path="/home/opc/.ssh/oci_api_key.pem"
+
+### Region
+#export TF_VAR_region="us-phoenix-1"
+
+### Compartment
+#export TF_VAR_compartment_ocid=""
+
+### Public/private keys used on the instance
+#export TF_VAR_ssh_public_key=$(cat /home/opc/.ssh/id_rsa.pub)
+#export TF_VAR_ssh_private_key=$(cat /home/opc/.ssh/id_rsa)
+
+
+export TF_VAR_tenancy_ocid="ocid1.tenancy.oc1..aaaaaaaaebxriz7y7egelwfkjdbnjdvq6k5vaaxo3o35fvfzf3g7ryvxevka"
+export TF_VAR_user_ocid="ocid1.user.oc1..aaaaaaaafzzks5i2rxfpawu3fwwn3srh3ltd6os4pguvctbq767ozw4vdz5a"
+#export TF_VAR_fingerprint=98:11:0b:f0:5f:6b:27:dc:f3:5d:86:b2:dd:6b:91:f3
+export TF_VAR_fingerprint=73:99:86:8b:14:92:08:22:c8:46:15:99:95:26:b8:64
+export TF_VAR_private_key_path=/home/opc/.oci/oci_api_key.pem
+
+### Region
+export TF_VAR_region="us-phoenix-1"
+
+### Compartment
+export TF_VAR_compartment_ocid="ocid1.tenancy.oc1..aaaaaaaaebxriz7y7egelwfkjdbnjdvq6k5vaaxo3o35fvfzf3g7ryvxevka"
+
+### Public/private keys used on the instance
+export TF_VAR_ssh_public_key=$(cat /home/opc/.ssh/id_rsa.pub)
+export TF_VAR_ssh_private_key=$(cat /home/opc/.ssh/id_rsa)
+
+## The path to the file, not the content of the file
+export TF_VAR_ssh_private_key_path="/home/opc/.ssh/id_rsa"
