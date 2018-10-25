@@ -53,4 +53,8 @@ When terraform apply is complete, the terminal console will display the public i
 
         ssh -i ~/.ssh/id_rsa opc@${data.oci_core_vnic.bastion_vnic.public_ip_address}
 
+## Manual step to create Cluster
+See steps described in the screenshot below: 
+
+![](./images/tf_output.PNG)
 
