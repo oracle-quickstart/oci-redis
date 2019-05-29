@@ -45,14 +45,6 @@ REDIS_DATA_DIR=/var/lib/redis \
 REDIS_EXECUTABLE=/usr/local/bin/redis-server ./utils/install_server.sh
 
 
-# master - slave comm does not work, if I create and use zone: redis. Hence changing to public
-# sudo firewall-cmd --permanent --new-zone=redis
-
-#sudo firewall-cmd --permanent --zone=public --add-port=6379/tcp
-
-#sudo firewall-cmd --permanent --zone=public --add-port=16379/tcp
-# sudo firewall-cmd --permanent --zone=redis --add-source=<client_server_private_IP>
-
 sudo firewall-offline-cmd  --zone=public --add-port=6379/tcp
 
 sudo firewall-offline-cmd  --zone=public --add-port=16379/tcp
