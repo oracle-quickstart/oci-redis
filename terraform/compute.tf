@@ -21,7 +21,7 @@ resource "oci_core_instance" "bastion" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-    user_data           = "${base64encode(file("scripts/bastion_boot.sh"))}"
+    user_data           = "${base64encode(file("../scripts/bastion_boot.sh"))}"
   }
 
   timeouts {
@@ -48,7 +48,7 @@ resource "oci_core_instance" "redis_node" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-    user_data           = "${base64encode(file("./scripts/redis_deploy.sh"))}"
+    user_data           = "${base64encode(file("../scripts/redis_deploy.sh"))}"
   }
 
   timeouts {
@@ -75,7 +75,7 @@ resource "oci_core_instance" "slave_node" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-    //user_data = "${base64encode(file("../scripts/boot.sh"))}"
+    //user_data = "${base64encode(file(".../scripts/boot.sh"))}"
   }
 
   timeouts {
@@ -89,7 +89,7 @@ resource "null_resource" "redis-deploy" {
   depends_on = ["oci_core_instance.redis_node", "oci_core_instance.bastion"]
 
   provisioner "file" {
-    source      = "./scripts/"
+    source      = "../scripts/"
     destination = "/home/opc/"
 
     connection {
@@ -102,20 +102,20 @@ resource "null_resource" "redis-deploy" {
   }
 
   /*
-      provisioner "file" {
-        source = "scripts/bastion.sh"
-        destination = "/home/opc/bastion.sh"
-        connection {
-          agent = false
-          timeout = "10m"
-          host = "${data.oci_core_vnic.bastion_vnic.public_ip_address}"
-          user = "opc"
-          private_key = "${var.ssh_private_key}"
-      }
-      }
-      */
+                provisioner "file" {
+                  source = "scripts/bastion.sh"
+                  destination = "/home/opc/bastion.sh"
+                  connection {
+                    agent = false
+                    timeout = "10m"
+                    host = "${data.oci_core_vnic.bastion_vnic.public_ip_address}"
+                    user = "opc"
+                    private_key = "${var.ssh_private_key}"
+                }
+                }
+                */
   provisioner "file" {
-    source      = "/home/opc/.ssh/id_rsa"
+    source      = "${var.ssh_private_key_path}"
     destination = "/home/opc/.ssh/id_rsa"
 
     connection {

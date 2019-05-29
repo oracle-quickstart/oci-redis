@@ -17,7 +17,7 @@ resource "oci_core_route_table" "RouteForComplete" {
   display_name   = "RouteTableForComplete"
 
   route_rules {
-    cidr_block        = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     network_entity_id = "${oci_core_internet_gateway.redis_internet_gateway.id}"
   }
 }
@@ -28,7 +28,7 @@ resource "oci_core_route_table" "PrivateRouteTable" {
   display_name   = "PrivateRouteTableForComplete"
 
   route_rules {
-    cidr_block        = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     network_entity_id = "${oci_core_private_ip.bastion_private_ip.id}"
 
     //network_entity_id = "${lookup(data.oci_core_private_ips.myPrivateIPs.private_ips[0],"id")}"
