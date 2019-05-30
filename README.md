@@ -43,7 +43,7 @@ Deploy using standard Terraform commands
 ## SSH to Bastion Node
 When terraform apply is complete, the terminal console will display the public ip address for bastion node.  The default login is opc.  You can SSH into the machine with a command like this:
 
-        ssh -i ~/.ssh/id_rsa opc@$<Public IP address of the Bastion Instance
+  `ssh -i ~/.ssh/id_rsa opc@$<Public IP address of the Bastion Instance`
 
 To access Redis nodes, you need to use the Bastion instance as a jump box. Connect to the Bastion first, then connect to the Redis instances. 
 
