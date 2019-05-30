@@ -85,6 +85,8 @@ sudo systemctl status redis_6379
 if [ $? -eq 0 ]; then
     touch /home/opc/complete;
 fi
-# redis-cli --cluster create 10.0.3.3:6379 10.0.3.4:6379 10.0.4.4:6379 10.0.4.3:6379 10.0.3.2:6379 10.0.4.2:6379 --cluster-replicas 1
+sleep 60
+
+redis-cli --cluster create 10.0.3.3:6379 10.0.3.4:6379 10.0.4.4:6379 10.0.4.3:6379 10.0.3.2:6379 10.0.4.2:6379 --cluster-replicas 1
 
 set +x
