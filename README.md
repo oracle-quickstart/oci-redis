@@ -33,9 +33,12 @@ Update environment variables in config file: [env-vars](https://github.com/cloud
 
 Deploy using standard Terraform commands
 
-        terraform init
-	terraform plan
-	terraform apply
+`terraform init`
+
+`terraform plan`
+
+`terraform apply`
+
 
 ## SSH to Bastion Node
 When terraform apply is complete, the terminal console will display the public ip address for bastion node.  The default login is opc.  You can SSH into the machine with a command like this:
