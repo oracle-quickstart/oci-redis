@@ -79,7 +79,6 @@ sudo echo "nameserver 169.254.169.254" >> /etc/resolv.conf
 ## Cleanup any exiting files just in case
 if [ -f host_list ]; then
 	rm -f host_list;
-	#rm -f redisnodes;
 	rm -f hosts_ip;
 	rm -f hosts;
 fi
@@ -87,24 +86,14 @@ fi
 ## Continue with Main Setup
 # First do some network & host discovery
 host_discovery >> host_list
-#cat host_list | grep slave >> slavenodes
-#cat host_list | grep master >> masternodes
 master1fqdn=`cat host_list | grep redis-node-1`
-#w1fqdn=`cat host_list | grep cdh-worker-1`
 for host in `cat host_list`; do
 	h_ip=`dig +short $host`
 	echo -e "$h_ip\t$host" >> hosts
 	echo -e "$h_ip" >> hosts_ip
 done;
 
-## REFACTOR THE NETWORK LOOKUP FOR MULTI AD SUPPORT - OR JUST WHITELIST KNOWN SUBNET 10.0.0.0/16 - Only needed for Firewall Enabled
-#unset local_network
-# if [ -f hosts ]; then
-# 	local_network="10.0.0.0/16"
-# 	#local_network=`cat hosts | grep -w "cdh-worker-1" | gawk '{print $1}' | cut -d '.' -f 1-3`
-# fi
 master1_ip=`dig +short ${master1fqdn}`
-#sed -i "s/MASTERIP/$master_ip/g" redis_deploy_slave.sh
 
 ## Primary host setup section
 for host in `cat host_list | gawk -F '.' '{print $1}'`; do
@@ -113,33 +102,7 @@ for host in `cat host_list | gawk -F '.' '{print $1}'`; do
         host_ip=`cat hosts | grep $host | gawk '{print $1}'`
         ssh_check
 	echo -e "Copying Setup Scripts...\n"
-        ## Copy Setup scripts
-        ##scp -o BatchMode=yes -o StrictHostkeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/hosts opc@$hostfqdn:~/
-				##scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/.ssh/id_rsa opc@$hostfqdn:~/.ssh/
-				##scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/host_list opc@$hostfqdn:~/
-				##scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/hosts_ip opc@$hostfqdn:~/
-				##ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa opc@$hostfqdn "chmod 0600 .ssh/id_rsa"
-        ##scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/redis_deploy.sh opc@$hostfqdn:~/
-        #scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/redis_deploy_slave.sh opc@$hostfqdn:~/
-        # scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/tune.sh opc@$hostfqdn:~/
-        # scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/disk_setup.sh opc@$hostfqdn:~/
-        ## Set Execute Flag on scripts
-        ##ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa opc@$hostfqdn 'chmod +x *.sh'
-        ## Execute Node Prep
-        # ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa opc@$hostfqdn 'sudo ./node_prep.sh &'
-
-				# cat host_list | grep -q -w $host
-				# if [ $? -eq 0 ]; then
         echo -e "\tRunning Redis Nodes Setup for Cluster..."
-				# ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa opc@$hostfqdn 'sudo ./redis_deploy.sh'
-				# fi
-
-				# cat slavenodes | grep -q -w $host
-				# if [ $? -eq 0 ]; then
-        #         echo -e "\tRunning Slave Setup..."
-				# 				ssh -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa opc@$hostfqdn 'sudo ./redis_deploy_slave.sh'
-				# fi
-
         echo -e "\tDone initializing $host.\n\n"
 done;
 
@@ -169,11 +132,6 @@ done;
 redis_cluster_create_cmd="redis-cli --cluster create ";
 redis_cluster_create_cmd+="$node_ip_list  --cluster-replicas 1"
 
-echo $redis_cluster_create_cmd > redis_cluster_create_cmd.txt
-
+echo $redis_cluster_create_cmd > redis_cluster_create_cmd.sh
 
 scp -o BatchMode=yes -o StrictHostKeyChecking=no -i /home/opc/.ssh/id_rsa /home/opc/redis_cluster_create_cmd.txt opc@$master1fqdn:~/
-## RUN the COMMAND mentioned in the file (/home/opc/redis_cluster_create_cmd.txt) manually on one of the redis-node-x instance. It requires user to confirm the command execution.
-
-
-set +x
