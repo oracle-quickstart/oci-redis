@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 initDNS="${name}0.${name}.${name}.oraclevcn.com"
 nodeDNS=$(hostname -f)
 REDIS_PORT=6379
@@ -22,7 +20,7 @@ firewall-offline-cmd  --zone=public --add-port=16379/tcp
 systemctl restart firewalld
 
 # Install wget and gcc
-yum install -y gcc wget
+yum install -y wget gcc
 
 # Download and compile Redis
 wget http://download.redis.io/releases/redis-5.0.5.tar.gz
@@ -40,9 +38,7 @@ sed -i "s/^appendonly no/appendonly yes/g" /etc/redis.conf
 sed -i "s/^daemonize no/daemonize yes/g" /etc/redis.conf
 sed -i "s/^# requirepass foobared/requirepass ${password}/g" /etc/redis.conf
 
-
 redis-server /etc/redis.conf
-
 sleep 60
 
 if [[ $initDNS == $nodeDNS ]]
