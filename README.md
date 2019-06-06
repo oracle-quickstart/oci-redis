@@ -31,3 +31,31 @@ Now for the main attraction.  Let's make sure the plan looks good:
 That gives:
 
 ![](./images/terraform-plan.png)
+
+If that's good, we can go ahead and apply the deploy:
+
+    terraform apply
+
+You'll need to enter `yes` when prompted.  Once complete, you'll see something like this:
+
+![](./images/terraform-apply.png)
+
+When the apply is complete, the infrastructure will be deployed, but cloud-init scripts will still be running.  Those will wrap up asynchronously.  So, it'll be a few more minutes before your cluster is accessible.  Now is a good time to get a coffee.
+
+When the deployment is completed, it will show you the public IP of one of the instances created on Oracle Cloud Infrastructure (OCI). Using that public IP, you can SSH into the node.
+
+`ssh -i <the key you used> <public IP of the Redis instance>`
+
+## View the instance in the Console
+You can also login to the web console [here](https://console.us-phoenix-1.oraclecloud.com/a/compute/instances) to view the IaaS that is running the cluster.
+
+![](./images/console.png)
+
+## Destroy the Deployment
+When you no longer need the deployment, you can run this command to destroy it:
+
+    terraform destroy
+
+You'll need to enter `yes` when prompted.
+
+![](./images/terraform-destroy.png)
