@@ -48,9 +48,11 @@ When the deployment is completed, it will show you the public IP of one of the i
 
 When logged in, use the following commands and the password printed in the output to connect to the Redis cluster.
 
-```redis-cli -h $(hostname -i)
+```
+redis-cli -h $(hostname -i)
 auth <password in Terraform output>
-cluster info```
+cluster info
+```
 
 ![](./images/redis.png)
 
