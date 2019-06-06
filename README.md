@@ -46,6 +46,14 @@ When the deployment is completed, it will show you the public IP of one of the i
 
 `ssh -i <the key you used> <public IP of the Redis instance>`
 
+When logged in, use the following commands and the password printed in the output to connect to the Redis cluster.
+
+```redis-cli -h $(hostname -i)
+auth <password in Terraform output>
+cluster info```
+
+![](./images/redis.png)
+
 ## View the instance in the Console
 You can also login to the web console [here](https://console.us-phoenix-1.oraclecloud.com/a/compute/instances) to view the IaaS that is running the cluster.
 
