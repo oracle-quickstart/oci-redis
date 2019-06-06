@@ -6,12 +6,28 @@ variable "region" {}
 
 variable "compartment_ocid" {}
 variable "ssh_public_key" {}
-variable "ssh_private_key" {}
-variable "ssh_private_key_path" {}
+
+variable "CIDR" {
+  default = "10.0.0.0/16"
+}
+
+variable "instance" {
+  type = "map"
+
+  default = {
+    name           = "redis"
+    shape          = "VM.Standard2.1"
+    instance_count = 6
+  }
+}
+
+locals {
+  fault_domains_per_ad = 3
+}
 
 // https://docs.cloud.oracle.com/iaas/images/image/cf34ce27-e82d-4c1a-93e6-e55103f90164/
 // Oracle-Linux-7.6-2019.05.14-0
-variable "InstanceImageOCID" {
+variable "images" {
   type = "map"
 
   default = {
@@ -24,31 +40,3 @@ variable "InstanceImageOCID" {
     us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaavtjpvg4njutkeu7rf7c5lay6wdbjhd4cxis774h7isqd6gktqzoa"
   }
 }
-
-variable "VPC-CIDR" {
-  default = "10.0.0.0/16"
-}
-
-variable "bastion_node_count" {
-  default = "1"
-}
-
-variable "bastion_instance_shape" {
-  default = "VM.Standard2.2"
-}
-
-variable "redis_node_count" {
-  default = "6"
-}
-
-variable "redis_instance_shape" {
-  default = "VM.Standard2.2"
-}
-
-/*
-variable "slave_node_count" { default = "0" }
-variable "slave_instance_shape" {
-  default = "VM.Standard2.2"
-}
-*/
-
