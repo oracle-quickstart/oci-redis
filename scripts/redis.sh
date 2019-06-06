@@ -38,6 +38,8 @@ sed -i "s/^# cluster-config-file /cluster-config-file /g" /etc/redis.conf
 sed -i "s/^# cluster-node-timeout 15000/cluster-node-timeout 15000/g" /etc/redis.conf
 sed -i "s/^appendonly no/appendonly yes/g" /etc/redis.conf
 sed -i "s/^daemonize no/daemonize yes/g" /etc/redis.conf
+sed -i "s/^# requirepass foobared/requirepass ${password}/g" /etc/redis.conf
+
 
 redis-server /etc/redis.conf
 
@@ -45,5 +47,5 @@ sleep 60
 
 if [[ $initDNS == $nodeDNS ]]
 then
-    echo "yes" | redis-cli --cluster create $join --cluster-replicas 1
+    echo "yes" | redis-cli --cluster create $join --cluster-replicas 1 -a ${password}
 fi

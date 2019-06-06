@@ -2,8 +2,9 @@ data "template_file" "user_data" {
   template = "${file("../scripts/redis.sh")}"
 
   vars {
-    count = "${var.instance["instance_count"]}"
-    name  = "${var.instance["name"]}"
+    count    = "${var.instance["instance_count"]}"
+    name     = "${var.instance["name"]}"
+    password = "${random_string.redis_password.result}"
   }
 }
 
@@ -31,4 +32,9 @@ resource "oci_core_instance" "redis" {
     ssh_authorized_keys = "${var.ssh_public_key}"
     user_data           = "${base64encode(data.template_file.user_data.rendered)}"
   }
+}
+
+resource "random_string" "redis_password" {
+  length  = 64
+  special = false
 }
