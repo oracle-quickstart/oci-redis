@@ -12,7 +12,7 @@ n=${count}
 join=""
 
 for i in $(seq 0 $(($n > 0? $n-1: 0))); do 
-  nodes=$(host $name$i.$name.$name.oraclevcn.com | awk '{print $4}')
+  nodes=$(host ${name}$i.${name}.${name}.oraclevcn.com | awk '{print $4}')
   join="$${join}$${join:+ }$nodes:$REDIS_PORT"
 done
 
@@ -39,7 +39,7 @@ sed -i "s/^# cluster-node-timeout 15000/cluster-node-timeout 15000/g" /etc/redis
 sed -i "s/^appendonly no/appendonly yes/g" /etc/redis.conf
 sed -i "s/^daemonize no/daemonize yes/g" /etc/redis.conf
 
-/usr/local/bin/redis-server /etc/redis.conf
+redis-server /etc/redis.conf
 
 sleep 60
 
