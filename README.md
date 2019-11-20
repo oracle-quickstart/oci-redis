@@ -7,8 +7,8 @@ First off you'll need to do some pre deploy setup.  That's all detailed [here](h
 ## Clone the module
 Now, you'll want a local copy of this repo.  You can make that with the commands:
 
-    git clone https://github.com/oracle/oci-quickstart-redis.git
-    cd oci-quickstart-redis/terraform
+    git clone https://github.com/oracle-quickstart/oci-redis.git
+    cd oci-redis/terraform
     ls
 
 ## Initialize the deployment
