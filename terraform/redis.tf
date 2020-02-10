@@ -11,7 +11,7 @@ data "template_file" "user_data" {
 resource "oci_core_instance" "redis" {
   count               = var.instance["instance_count"]
   availability_domain = element(data.template_file.ad_names.*.rendered, count.index)
-  fault_domain        = "FAULT-DOMAIN-${floor(((count.index / length(data.template_file.ad_names.*.rendered)) % local.fault_domains_per_ad)) +1}"
+  fault_domain        = "FAULT-DOMAIN-${(count.index % 3) + 1}"
   compartment_id      = var.compartment_ocid
   display_name        = "${var.instance["name"]}${count.index}"
   shape               = var.instance["shape"]
