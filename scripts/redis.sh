@@ -4,6 +4,7 @@ initDNS="${name}0.${name}.${name}.oraclevcn.com"
 nodeDNS=$(hostname -f)
 REDIS_PORT=6379
 private_ip=$(hostname -i)
+version="5.0.7"
 
 # Create the list of nodes to join the cluster based on the number of instances
 n=${count}
@@ -23,9 +24,9 @@ systemctl restart firewalld
 yum install -y wget gcc
 
 # Download and compile Redis
-wget http://download.redis.io/releases/redis-5.0.5.tar.gz
-tar xvzf redis-5.0.5.tar.gz
-cd redis-5.0.5
+wget http://download.redis.io/releases/redis-$version.tar.gz
+tar xvzf redis-$version.tar.gz
+cd redis-$version
 make install
 
 # Prepare redis.conf for clustering
