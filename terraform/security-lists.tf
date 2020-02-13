@@ -43,5 +43,15 @@ resource "oci_core_security_list" "SecurityList" {
       min = "16379"
     }
   }
+
+  ingress_security_rules {
+    protocol = local.tcp_protocol
+    source   = var.CIDR
+
+    tcp_options {
+      max = "26379"
+      min = "26379"
+    }
+  }
 }
 
