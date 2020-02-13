@@ -1,19 +1,20 @@
 #!/bin/bash
+set -x
+exec 3>&1 4>&2
+trap 'exec 2>&4 1>&3' 0 1 2 3
+exec 1>/etc/tflog.out 2>&1
 
-initDNS="${name}0.${name}.${name}.oraclevcn.com"
-nodeDNS=$(hostname -f)
+INIT_DNS="${name}0.${name}.${name}.oraclevcn.com"
+NODE_DNS=$(hostname -f)
+MASTER_PRIVATE_IP=$(host "$INIT_DNS" | awk '{ print $4 }')
+
+PASSWORD=${password}
+REDIS_VERSION="5.0.7"
 REDIS_PORT=6379
-private_ip=$(hostname -i)
-version="5.0.7"
+REDIS_CONFIG_FILE=/etc/redis.conf
 
-# Create the list of nodes to join the cluster based on the number of instances
-n=${count}
-join=""
-
-for i in $(seq 0 $(($n > 0? $n-1: 0))); do 
-  nodes=$(host ${name}$i.${name}.${name}.oraclevcn.com | awk '{print $4}')
-  join="$${join}$${join:+ }$nodes:$REDIS_PORT"
-done
+SENTINEL_PORT=26379
+SENTINEL_CONFIG_FILE=/etc/sentinel.conf
 
 # Setup firewall rules
 firewall-offline-cmd  --zone=public --add-port=6379/tcp
@@ -24,25 +25,33 @@ systemctl restart firewalld
 yum install -y wget gcc
 
 # Download and compile Redis
-wget http://download.redis.io/releases/redis-$version.tar.gz
-tar xvzf redis-$version.tar.gz
-cd redis-$version
+wget http://download.redis.io/releases/redis-$REDIS_VERSION.tar.gz
+tar xvzf redis-$REDIS_VERSION.tar.gz
+cd redis-$REDIS_VERSION
 make install
 
-# Prepare redis.conf for clustering
-cp ./redis.conf /etc/redis.conf
-sed -i "s/^bind 127.0.0.1/bind $private_ip/g" /etc/redis.conf
-sed -i "s/^# cluster-enabled yes/cluster-enabled yes/g" /etc/redis.conf
-sed -i "s/^# cluster-config-file /cluster-config-file /g" /etc/redis.conf
-sed -i "s/^# cluster-node-timeout 15000/cluster-node-timeout 15000/g" /etc/redis.conf
-sed -i "s/^appendonly no/appendonly yes/g" /etc/redis.conf
-sed -i "s/^daemonize no/daemonize yes/g" /etc/redis.conf
-sed -i "s/^# requirepass foobared/requirepass ${password}/g" /etc/redis.conf
+cp ./redis.conf $REDIS_CONFIG_FILE
 
-redis-server /etc/redis.conf
-sleep 60
-
-if [[ $initDNS == $nodeDNS ]]
+if [[ $INIT_DNS == $NODE_DNS ]]
 then
-    echo "yes" | redis-cli --cluster create $join --cluster-replicas 1 -a ${password}
-fi
+  sed -i "s/^bind 127.0.0.1/bind $MASTER_PRIVATE_IP/g" $REDIS_CONFIG_FILE
+  sed -i "s/^daemonize no/daemonize yes/g" $REDIS_CONFIG_FILE
+  sed -i "s/^# requirepass foobared/requirepass $PASSWORD/g" $REDIS_CONFIG_FILE
+  redis-server /etc/redis.conf
+else
+  sleep 60
+  sed -i "s/^# masterauth <master-password>/masterauth $PASSWORD/g" $REDIS_CONFIG_FILE
+  sed -i "s/^# replicaof <masterip> <masterport>/replicaof $MASTER_PRIVATE_IP $REDIS_PORT/g" $REDIS_CONFIG_FILE
+  redis-server /etc/redis.conf
+ fi
+
+cat << EOF > $SENTINEL_CONFIG_FILE
+port $SENTINEL_PORT
+sentinel monitor $INIT_DNS $MASTER_PRIVATE_IP 6379 2
+sentinel down-after-milliseconds $INIT_DNS 5000
+sentinel failover-timeout $INIT_DNS 60000
+sentinel parallel-syncs $INIT_DNS 1
+EOF
+
+sleep 30
+redis-server /etc/sentinel.conf --sentinel
