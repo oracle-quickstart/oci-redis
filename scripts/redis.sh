@@ -18,6 +18,7 @@ SENTINEL_CONFIG_FILE=/etc/sentinel.conf
 # Setup firewall rules
 firewall-offline-cmd  --zone=public --add-port=6379/tcp
 firewall-offline-cmd  --zone=public --add-port=16379/tcp
+firewall-offline-cmd  --zone=public --add-port=26379/tcp
 systemctl restart firewalld
 
 # Install wget and gcc
