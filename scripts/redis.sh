@@ -7,12 +7,11 @@ exec 1>/etc/tflog.out 2>&1
 INIT_DNS="${name}0.${name}.${name}.oraclevcn.com"
 NODE_DNS=$(hostname -f)
 MASTER_PRIVATE_IP=$(host "$INIT_DNS" | awk '{ print $4 }')
-
 PASSWORD=${password}
+
 REDIS_VERSION="5.0.7"
 REDIS_PORT=6379
 REDIS_CONFIG_FILE=/etc/redis.conf
-
 SENTINEL_PORT=26379
 SENTINEL_CONFIG_FILE=/etc/sentinel.conf
 
@@ -32,6 +31,7 @@ make install
 
 cp ./redis.conf $REDIS_CONFIG_FILE
 
+# Configure the node as master or replica
 if [[ $INIT_DNS == $NODE_DNS ]]
 then
   sed -i "s/^bind 127.0.0.1/bind $MASTER_PRIVATE_IP/g" $REDIS_CONFIG_FILE
@@ -45,6 +45,7 @@ else
   redis-server $REDIS_CONFIG_FILE
  fi
 
+# Configure Sentinel
 cat << EOF > $SENTINEL_CONFIG_FILE
 port $SENTINEL_PORT
 sentinel monitor $INIT_DNS $MASTER_PRIVATE_IP 6379 2
