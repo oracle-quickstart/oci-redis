@@ -37,12 +37,12 @@ then
   sed -i "s/^bind 127.0.0.1/bind $MASTER_PRIVATE_IP/g" $REDIS_CONFIG_FILE
   sed -i "s/^daemonize no/daemonize yes/g" $REDIS_CONFIG_FILE
   sed -i "s/^# requirepass foobared/requirepass $PASSWORD/g" $REDIS_CONFIG_FILE
-  redis-server /etc/redis.conf
+  redis-server $REDIS_CONFIG_FILE
 else
   sleep 60
   sed -i "s/^# masterauth <master-password>/masterauth $PASSWORD/g" $REDIS_CONFIG_FILE
   sed -i "s/^# replicaof <masterip> <masterport>/replicaof $MASTER_PRIVATE_IP $REDIS_PORT/g" $REDIS_CONFIG_FILE
-  redis-server /etc/redis.conf
+  redis-server $REDIS_CONFIG_FILE
  fi
 
 cat << EOF > $SENTINEL_CONFIG_FILE
@@ -54,4 +54,4 @@ sentinel parallel-syncs $INIT_DNS 1
 EOF
 
 sleep 30
-redis-server /etc/sentinel.conf --sentinel
+redis-server $SENTINEL_CONFIG_FILE --sentinel
