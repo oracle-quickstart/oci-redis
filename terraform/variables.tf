@@ -29,7 +29,7 @@ variable "instance" {
   default = {
     name           = "redis"
     shape          = "VM.Standard2.1"
-    instance_count = 6
+    instance_count = 3
   }
 }
 
