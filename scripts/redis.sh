@@ -38,6 +38,7 @@ then
   sed -i "s/^bind 127.0.0.1/bind $MASTER_PRIVATE_IP/g" $REDIS_CONFIG_FILE
   sed -i "s/^daemonize no/daemonize yes/g" $REDIS_CONFIG_FILE
   sed -i "s/^# requirepass foobared/requirepass $PASSWORD/g" $REDIS_CONFIG_FILE
+  sed -i "s/^# cluster-enabled yes/cluster-enabled yes/g" $REDIS_CONFIG_FILE # <- Added by LFeldman
   redis-server $REDIS_CONFIG_FILE
 else
   sleep 60
