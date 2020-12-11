@@ -18,6 +18,7 @@ variableGroups:
   variables:
   - compartment_ocid
   - region
+  - availablity_domain_name
 
 - title: Optional Configuration
   visible: true
@@ -49,6 +50,14 @@ variables:
     title: "Region"
     description: "Choose region where you want to deploy the resources defined by this stack."
 
+  availablity_domain_name:
+    type: oci:identity:availabilitydomain:name
+    required: true
+    visibile: true
+    title: "Availability Domain"
+    description: "Choose availability Domain to be chosen for deploy of Redis compute instances."
+    dependsOn:
+      compartmentId: ${compartment_ocid}
 
   # Optional Configuration
   VCN-CIDR:
@@ -72,7 +81,7 @@ variables:
     required: false
     default: "redis"
     title: "Redis prefix"
-    description: "Name the prefix for all resources that will be created."
+    description: "Name the prefix for all OCI resources (compute, VCN, subnet) that will be created."
   
   redis_version:
     type: enum
