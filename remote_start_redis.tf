@@ -14,10 +14,8 @@ resource "null_resource" "redis_cluster_startup" {
     inline = [
       "echo '=== Starting REDIS on redis1 node... ==='",
       "sudo -u root nohup /usr/local/bin/redis-server /etc/redis.conf > /tmp/redis-server.log &",
-      #"sudo -u root nohup /usr/local/bin/redis-server /etc/sentinel.conf --sentinel  > /tmp/redis-sentinel.log &",
       "ps -ef | grep redis",
       "sleep 10",
-      #"sudo cat /tmp/redis-sentinel.log",
       "sudo cat /tmp/redis-server.log",
       "echo '=== Started REDIS on redis1 node... ==='"
     ]
@@ -36,10 +34,8 @@ resource "null_resource" "redis_cluster_startup" {
     inline = [
       "echo '=== Starting REDIS on redis2 node... ==='",
       "sudo -u root nohup /usr/local/bin/redis-server /etc/redis.conf > /tmp/redis-server.log &",
-      #"sudo -u root nohup /usr/local/bin/redis-server /etc/sentinel.conf --sentinel  > /tmp/redis-sentinel.log &",
       "ps -ef | grep redis",
       "sleep 10",
-      #"sudo cat /tmp/redis-sentinel.log",
       "sudo cat /tmp/redis-server.log",
       "echo '=== Started REDIS on redis1 node... ==='"
     ]
@@ -58,10 +54,8 @@ resource "null_resource" "redis_cluster_startup" {
     inline = [
       "echo '=== Starting REDIS on redis3 node... ==='",
       "sudo -u root nohup /usr/local/bin/redis-server /etc/redis.conf > /tmp/redis-server.log &",
-      #"sudo -u root nohup /usr/local/bin/redis-server /etc/sentinel.conf --sentinel  > /tmp/redis-sentinel.log &",
       "ps -ef | grep redis",
       "sleep 10",
-      #"sudo cat /tmp/redis-sentinel.log",
       "sudo cat /tmp/redis-server.log",
       "echo '=== Started REDIS on redis3 node... ==='"
     ]
