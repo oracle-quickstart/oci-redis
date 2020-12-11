@@ -31,7 +31,7 @@ variable "redis_port2" {
 }
 
 variable "sentinel_port" {
-  default = "16379"
+  default = "26379"
 }
 
 # OS Images
