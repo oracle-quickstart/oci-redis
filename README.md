@@ -16,7 +16,7 @@ If you don't have the required permissions and quota, contact your tenancy admin
 
 ## Deploy Using Oracle Resource Manager
 
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/lfeldman/oci-redis/raw/master/resource-manager/oci-redis.zip)
+1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://console.us-phoenix-1.oraclecloud.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-redis/archive/master.zip)
 
     If you aren't already signed in, when prompted, enter the tenancy and user credentials.
 
@@ -32,7 +32,7 @@ If you don't have the required permissions and quota, contact your tenancy admin
 
     To make any changes, return to the Stack Details page, click **Edit Stack**, and make the required changes. Then, run the **Plan** action again.
 
-7. If no further changes are necessary, return to the Stack Details page, click **Terraform Actions**, and select **Apply**. 
+7. If no further changes are necessary, return to the Stack Details page, click **Terraform Actions**, and select **Apply**.
 
 ## Deploy Using the Terraform CLI
 
