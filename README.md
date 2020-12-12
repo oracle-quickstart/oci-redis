@@ -47,7 +47,9 @@ Now, you'll want a local copy of this repo. You can make that with the commands:
 
 1. Complete the prerequisites described [here](https://github.com/cloud-partners/oci-prerequisites).
 
-2. Create a `terraform.tfvars` file, and specify the following variables:
+2. Rename `provider.tf.cli` to `provider.tf`
+
+3. Create a `terraform.tfvars` file, and specify the following variables:
 
 ```
 # Authentication
