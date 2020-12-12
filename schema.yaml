@@ -1,0 +1,200 @@
+## Copyright © 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+title: "Create typical six-node deployment of a Redis cluster on Oracle Cloud Infrastructure Compute instances"
+stackDescription: "Deploy six-node deployment of a Redis cluster on Oracle Cloud Infrastructure Compute instances to take advantage of in-memory data structure store that is used as a database, cache, and message broker."
+schemaVersion: 1.1.0
+version: "20190404"
+locale: "en"
+
+variableGroups:
+- title: General Configuration
+  visible: false
+  variables:
+  - tenancy_ocid
+
+- title: Required Configuration
+  visible: true  
+  variables:
+  - compartment_ocid
+  - region
+  - availablity_domain_name
+
+- title: Optional Configuration
+  visible: true
+  variables:  
+  - VCN-CIDR
+  - Subnet-CIDR
+  - redis-prefix
+  - redis_version
+  - redis_port1
+  - redis_port2
+  - sentinel_port
+  - instance_shape
+  - instance_os
+  - linux_os_version
+    
+variables:
+
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    visibile: true
+    title: "Compartment"
+    description: "Choose compartment where you want to create the solution resources"
+
+  region:
+    type: oci:identity:region:name
+    required: true
+    visibile: true
+    title: "Region"
+    description: "Choose region where you want to deploy the resources defined by this stack."
+
+  availablity_domain_name:
+    type: oci:identity:availabilitydomain:name
+    required: true
+    visibile: true
+    title: "Availability Domain"
+    description: "Choose availability Domain to be chosen for deploy of Redis compute instances."
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  # Optional Configuration
+  VCN-CIDR:
+    type: string
+    required: false
+    default: "10.0.0.0/16"
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    title: "VCN CIDR"
+    description: "Choose VCN's CIDR block where Redis compute instances will be deployed."
+
+  Subnet-CIDR:
+    type: string
+    required: false
+    default: "10.0.2.0/24"
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    title: "Subnet CIDR"
+    description: "Choose Public Subnet's CIDR where Redis compute instances will be deployed."
+
+  redis-prefix:
+    type: string
+    required: false
+    default: "redis"
+    title: "Redis prefix"
+    description: "Name the prefix for all OCI resources (compute, VCN, subnet) that will be created."
+  
+  redis_version:
+    type: enum
+    required: false
+    default: "5.0.7"
+    title: "Redis version"
+    description: "Choose Redis version to be deployed."  
+    enum:
+      - "5.0.7"
+
+  redis_port1:
+    type: number
+    required: false
+    minimum: 0
+    maximum: 65535
+    multipleOf: 1
+    default: 6379
+    title: "Redis client port"
+    description: "Choose Redis normal client communication port (we recommend default 6379)."  
+
+  redis_port2:
+    type: number
+    required: false
+    minimum: 0
+    maximum: 65535
+    multipleOf: 1
+    default: 16379
+    title: "Redis cluster bus port"
+    description: "Choose Redis cluster bus port must be reachable from all the other cluster nodes. (we recommend default 16379)."  
+
+  sentinel_port:
+    type: number
+    required: false
+    minimum: 0
+    maximum: 65535
+    multipleOf: 1
+    default: 26379
+    title: "Redis Sentinel port"
+    description: "Choose Redis Sentinel port. (we recommend default 26379)."  
+  
+  instance_shape:
+    type: oci:core:instanceshape:name
+    required: false
+    default: "VM.Standard2.1"
+    title: "Instance shape for Redis compute instances"
+    description: "Choose the shape of the VM used for Redis compute instances."
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  instance_os:
+    type: enum
+    required: false
+    default: "Oracle Linux"
+    title: "Operating System"
+    description: "Choose Operating system for Redis compute instances."
+    enum:
+      - "Oracle Linux"
+
+  linux_os_version:
+    type: enum
+    required: false
+    default: "7.8"
+    title: "OS version"
+    description: "Choose Operating system version for Redis compute instances."
+    enum:
+      - "7.8"
+
+outputs:
+  
+  redis1_public_ip_address:
+    title: "Redis1 Server Public IP"
+    displayText: "Redis1 Server Public IP"
+    type: copyableString
+    visible: true
+  
+  redis2_public_ip_address:
+    title: "Redis2 Server Public IP"
+    displayText: "Redis2 Server Public IP"
+    type: copyableString
+    visible: true
+
+  redis3_public_ip_address:
+    title: "Redis3 Server Public IP"
+    displayText: "Redis3 Server Public IP"
+    type: copyableString
+    visible: true
+
+  redis4_public_ip_address:
+    title: "Redis4 Server Public IP"
+    displayText: "Redis4 Server Public IP"
+    type: copyableString
+    visible: true
+
+  redis5_public_ip_address:
+    title: "Redis5 Server Public IP"
+    displayText: "Redis5 Server Public IP"
+    type: copyableString
+    visible: true
+
+  redis6_public_ip_address:
+    title: "Redis6 Server Public IP"
+    displayText: "Redis6 Server Public IP"
+    type: copyableString
+    visible: true
+
+  redis_password:
+    title: "Redis auth password"
+    displayText: "Redis auth password"
+    type: copyableString
+    visible: true
+
+  generated_ssh_private_key:
+    title: "Generated SSH Private Key"
+    displayText: "Generated SSH Private Key"
+    type: string
+    visible: true

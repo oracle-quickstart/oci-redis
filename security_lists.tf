@@ -4,10 +4,10 @@ locals {
   anywhere      = "0.0.0.0/0"
 }
 
-resource "oci_core_security_list" "SecurityList" {
+resource "oci_core_security_list" "redis-securitylist" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_virtual_network.VCN.id
-  display_name   = "${var.instance["name"]}SecurityList"
+  vcn_id         = oci_core_virtual_network.redis-vcn.id
+  display_name   = "${var.redis-prefix}-securitylist"
 
   egress_security_rules {
     protocol    = local.tcp_protocol
@@ -46,7 +46,7 @@ resource "oci_core_security_list" "SecurityList" {
 
   ingress_security_rules {
     protocol = local.tcp_protocol
-    source   = var.CIDR
+    source   = var.VCN-CIDR
 
     tcp_options {
       max = "26379"
