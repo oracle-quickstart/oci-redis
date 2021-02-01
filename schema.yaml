@@ -12,12 +12,12 @@ variableGroups:
   visible: false
   variables:
   - tenancy_ocid
+  - region
 
 - title: Required Configuration
   visible: true  
   variables:
   - compartment_ocid
-  - region
   - availablity_domain_name
 
 - title: Optional Configuration
