@@ -10,9 +10,9 @@ data "template_file" "redis_bootstrap_master_template" {
     master1_private_ip = data.oci_core_vnic.redis1_vnic.private_ip_address
     master2_private_ip = data.oci_core_vnic.redis2_vnic.private_ip_address
     master3_private_ip = data.oci_core_vnic.redis3_vnic.private_ip_address
-    master1_fqdn       = join("",[data.oci_core_vnic.redis1_vnic.hostname_label,".","${var.redis-prefix}",".","${var.redis-prefix}",".oraclevcn.com"])
-    master2_fqdn       = join("",[data.oci_core_vnic.redis2_vnic.hostname_label,".","${var.redis-prefix}",".","${var.redis-prefix}",".oraclevcn.com"])
-    master3_fqdn       = join("",[data.oci_core_vnic.redis3_vnic.hostname_label,".","${var.redis-prefix}",".","${var.redis-prefix}",".oraclevcn.com"])
+    master1_fqdn       = join("",[data.oci_core_vnic.redis1_vnic.hostname_label,".",var.redis-prefix,".",var.redis-prefix,".oraclevcn.com"])
+    master2_fqdn       = join("",[data.oci_core_vnic.redis2_vnic.hostname_label,".",var.redis-prefix,".",var.redis-prefix,".oraclevcn.com"])
+    master3_fqdn       = join("",[data.oci_core_vnic.redis3_vnic.hostname_label,".",var.redis-prefix,".",var.redis-prefix,".oraclevcn.com"])
   }
 }
 
