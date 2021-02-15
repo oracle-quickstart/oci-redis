@@ -9,6 +9,8 @@ resource "oci_core_security_list" "redis-securitylist" {
   vcn_id         = oci_core_virtual_network.redis-vcn.id
   display_name   = "${var.redis-prefix}-securitylist"
 
+  defined_tags = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
+
   egress_security_rules {
     protocol    = local.tcp_protocol
     destination = local.anywhere

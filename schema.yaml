@@ -33,6 +33,7 @@ variableGroups:
   - instance_shape
   - instance_os
   - linux_os_version
+  - release
     
 variables:
 
@@ -148,7 +149,13 @@ variables:
     description: "Choose Operating system version for Redis compute instances."
     enum:
       - "7.8"
-
+  
+  release:
+    type: string
+    required: false
+    visible: false
+    title: "Reference Architecture Release (OCI Architecture Center)"
+    
 outputs:
   
   redis1_public_ip_address:
