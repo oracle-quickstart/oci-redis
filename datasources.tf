@@ -73,3 +73,13 @@ data "oci_core_vnic_attachments" "redis6_vnics" {
 data "oci_core_vnic" "redis6_vnic" {
   vnic_id = data.oci_core_vnic_attachments.redis6_vnics.vnic_attachments.0.vnic_id
 }
+
+data "oci_identity_region_subscriptions" "home_region_subscriptions" {
+    tenancy_id = var.tenancy_ocid
+
+    filter {
+      name   = "is_home_region"
+      values = [true]
+    }
+}
+

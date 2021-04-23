@@ -1,3 +1,5 @@
+## Copyright (c) 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 resource "oci_core_instance" "redis4" {
   availability_domain = var.availablity_domain_name
@@ -6,6 +8,13 @@ resource "oci_core_instance" "redis4" {
   display_name        = "${var.redis-prefix}4"
   shape               = var.instance_shape
 
+  dynamic "shape_config" {
+    for_each = local.is_flexible_node_shape ? [1] : []
+    content {
+      memory_in_gbs = var.instance_flex_shape_memory
+      ocpus = var.instance_flex_shape_ocpus
+    }
+  }
   create_vnic_details {
     subnet_id        = oci_core_subnet.redis-subnet.id
     display_name     = "primaryvnic"
@@ -19,7 +28,8 @@ resource "oci_core_instance" "redis4" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_public_key
+    user_data = data.template_cloudinit_config.cloud_init.rendered
   }
 
   defined_tags = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
@@ -31,6 +41,14 @@ resource "oci_core_instance" "redis5" {
   compartment_id      = var.compartment_ocid
   display_name        = "${var.redis-prefix}5"
   shape               = var.instance_shape
+
+  dynamic "shape_config" {
+    for_each = local.is_flexible_node_shape ? [1] : []
+    content {
+      memory_in_gbs = var.instance_flex_shape_memory
+      ocpus = var.instance_flex_shape_ocpus
+    }
+  }
 
   create_vnic_details {
     subnet_id        = oci_core_subnet.redis-subnet.id
@@ -45,7 +63,8 @@ resource "oci_core_instance" "redis5" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_public_key
+    user_data = data.template_cloudinit_config.cloud_init.rendered
   }
 
   defined_tags = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
@@ -58,6 +77,14 @@ resource "oci_core_instance" "redis6" {
   display_name        = "${var.redis-prefix}6"
   shape               = var.instance_shape
 
+  dynamic "shape_config" {
+    for_each = local.is_flexible_node_shape ? [1] : []
+    content {
+      memory_in_gbs = var.instance_flex_shape_memory
+      ocpus = var.instance_flex_shape_ocpus
+    }
+  }
+  
   create_vnic_details {
     subnet_id        = oci_core_subnet.redis-subnet.id
     display_name     = "primaryvnic"
@@ -71,7 +98,8 @@ resource "oci_core_instance" "redis6" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_public_key
+    user_data = data.template_cloudinit_config.cloud_init.rendered
   }
 
   defined_tags = {"${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }

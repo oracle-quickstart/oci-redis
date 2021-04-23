@@ -1,3 +1,6 @@
+## Copyright (c) 2020, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "null_resource" "redis_cluster_startup" {
   depends_on = [null_resource.redis1_bootstrap, null_resource.redis2_bootstrap, null_resource.redis3_bootstrap, null_resource.redis4_bootstrap, null_resource.redis5_bootstrap, null_resource.redis6_bootstrap]
 
