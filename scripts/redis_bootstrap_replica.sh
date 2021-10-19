@@ -32,8 +32,8 @@ cluster-node-timeout 5000
 cluster-slave-validity-factor 0
 appendonly yes
 requirepass ${redis_password}
+masterauth ${redis_password}
 EOF
-
 
 sleep 30
 #/usr/local/bin/redis-server $REDIS_CONFIG_FILE --daemonize yes

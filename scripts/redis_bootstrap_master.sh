@@ -31,6 +31,7 @@ cluster-node-timeout 5000
 cluster-slave-validity-factor 0
 appendonly yes
 requirepass ${redis_password}
+masterauth ${redis_password}
 EOF
 
 # Configure Sentinel
